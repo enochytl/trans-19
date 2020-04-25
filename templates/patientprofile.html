@@ -1,0 +1,74 @@
+<h1>Patient Profile</h1>
+<a href="{% url 'records' %}">Back to records</a>
+<br>
+<br>
+<table border="1">
+    <tr>
+        <th>Name: </th>
+        <th>{{ patient.name }}</th>
+    </tr>
+    <tr>
+        <th>Identity Document Number: </th>
+        <th>{{ patient.id_document_no }}</th>
+    </tr>
+    <tr>
+        <th>Date of Birth: </th>
+        <th>{{ patient.date_of_birth }}</th>
+    </tr>
+    <tr>
+        <th>Date on which the case was confirmed: </th>
+        <th>{{ patient.date_of_confirmation }}</th>
+    </tr>
+    <tr>
+        <th>Case Number: </th>
+        <th>{{ patient.case_no }}</th>
+    </tr>
+    <!-- <tr>
+      <th>Name</th>
+      <th>Identity Document Number</th>
+      <th>Date of Birth</th>
+      <th>Date on which the case was confirmed</th>
+      <th>Case Number</th>
+    </tr> -->
+    
+</table>
+
+<br>
+
+
+<table border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>X-Coord</th>
+        <th>Y-Coord</th>
+        <th>Category</th>
+        <th>Address</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lv in locations_visited %}
+      <tr>
+        <th> {{ lv.name }}</th>
+        <th> {{ lv.start_date }}</th>
+        <th> {{ lv.end_date }}</th>
+        <th> {{ lv.x }}</th>
+        <th> {{ lv.y }}</th>
+        <th> {{ lv.category }}</th>
+        <th> {% if lv.address_line_1 != None %} {{ lv.address_line_1 }} <br> {% endif %} 
+             {% if lv.address_line_2 != None %} {{ lv.address_line_2 }} <br> {% endif %} 
+              
+              
+              {% if lv.address_line_3 != None %} {{ lv.address_line_3 }} {% endif %} 
+              
+        </th>
+        <th> {{ lv.description }}</th>
+      </tr> 
+      {% empty %}
+      <tr>Empty Record</tr>
+      {% endfor %}
+    </tbody>
+  </table>

@@ -1,0 +1,38 @@
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <!-- <script src="/js/my.js"></script> -->
+  </head>
+<h1>Showing all patient records</h1>
+<br>
+<table border="1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Identity Document Number</th>
+      <th>Date of Birth</th>
+      <th>Date on which the case was confirmed</th>
+      <th>Case Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pa in patients %}
+    <tr class='clickable-row' data-href="{% url 'profile' pa.case_no %}">
+      <th> {{ pa.name }}</th>
+      <th> {{ pa.id_document_no }}</th>
+      <th> {{ pa.date_of_birth }}</th>
+      <th> {{ pa.date_of_confirmation }}</th>
+      <th> {{ pa.case_no }}</th>
+    </tr> 
+    {% empty %}
+    <tr>Empty Record</tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $(".clickable-row").click(function() {
+      window.location = $(this).data("href");
+  });
+});
+</script>
