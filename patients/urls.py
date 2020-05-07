@@ -7,6 +7,11 @@ urlpatterns = [
         views.PatientProfile.as_view(),
         name="profile"
     ),
+    path(
+        "search/",
+        views.SearchPage.as_view(),
+        name="search"
+    ),
     re_path(r'^records/$', views.records),
     re_path(r'^locations/$', views.locations, name='locations'),
     path("dpatient/", views.dpatient, name = "dpatient"),

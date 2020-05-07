@@ -1,6 +1,14 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from patients.models import Patients, Locations_visited
+from django.db.models import Q
+from datetime import datetime, timedelta 
+
+from django.template.defaulttags import register
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
 
 # Create your views here.
 
@@ -75,6 +83,60 @@ class Modify(TemplateView):
         context["locations_visited"] = Locations_visited.objects.filter(case_no=case_no)
         return context
 
+class SearchPage(TemplateView):
+    template_name = "search.html"
+
+    def get_context_data(self, **kwargs):
+        # case_no = self.kwargs["case_no"]
+
+        district_val = self.request.GET.get('district')
+        window = self.request.GET.get('window')
+        location = self.request.GET.get('location')
+        patients = []
+
+        connec = {}
+        if district_val and window and location:
+
+            patients_no  = list(Locations_visited.objects.filter(Q(name__icontains=location)).filter(district = district_val).values_list("case_no", flat=True).distinct())
+            print("patient no: ", patients_no)
+            patients = Patients.objects.filter(pk__in=patients_no)
+            for pa in patients:
+                pa_visted = Locations_visited.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(case_no=pa)
+                for pav in pa_visted:
+                    start_date = pav.start_date - timedelta(days = int(window))
+                    print("start: ",start_date)
+                    print("start: ",type(start_date))
+                    end_date = pav.start_date + timedelta(days = int(window))
+                    print("end: ", end_date)
+                    print("end: ", type(end_date))
+                    covisited_start = Locations_visited.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(start_date__range=( start_date, end_date ) )
+                    covisited_end = Locations_visited.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(end_date__range=( start_date, end_date ) )
+                    # covisited_end = Locations_visited.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(start_date_range=[pav.end_date-timedelta( end_date_range=[pav.start_date-timedelta(days = int(window)), pav.start_date + timedelta(days = int(window))])
+                    covisited = covisited_start | covisited_end
+                    print("covisited: ",covisited)
+                    # covisited = covisited_start.union(covisited_end)
+
+                    for tmp in covisited:
+                        print("tmp:", tmp.case_no.all())
+                        if pa.case_no not in  connec:
+                            connec[pa.case_no] = []
+                        print("tmp.case_no:",tmp.case_no)
+                        # print("tmp.case_no:",tmp.case_no==patients.Patients.None)
+                        for case in tmp.case_no.all():
+                            # tmp_pa = Patients.objects.get(pk = tmp.case_no)
+                            if case.case_no != pa.case_no:
+                                connec[pa.case_no].append([case.case_no, case.name, case.date_of_confirmation, tmp.name, tmp.start_date, tmp.description, pav.start_date, pav.description])
+
+
+        context = super().get_context_data(**kwargs)
+        context["patients"] = patients
+        print("connec:",connec)
+        context["connec"] = connec
+        context["district"] = district_val
+        context["window"] = window
+        context["location"] = location
+        # context["locations_visited"] = Locations_visited.objects.filter(case_no=case_no)
+        return context
 
 def modify(request, *wargs, **kwargs):
     if request.method == "POST":

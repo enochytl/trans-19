@@ -1,4 +1,200 @@
-<a href="/records/">Back to records</a>
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Search</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/app.css' %}" rel="stylesheet" type="text/css">
+
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300|Open+Sans:300|Oxygen|Material+Icons"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        function updateTextInput(val) {
+          document.getElementById('window_output').value=val; 
+        }
+        // window.onload = updateTextInput("0");
+    </script>
+</head>
+
+
+<body onload="updateTextInput('0');">
+    <!-- <div class="overlay">
+        <div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>
+    </div> -->
+    <h2> Search </h2>
+    <div class="row">
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-10">
+            <!-- <center>
+                <h3>Question Answering using Wikipedia</h3>
+                <p> <b>Models</b>: Albert - Electra</p>
+            </center> -->
+
+            <h4> Search </h4>
+            <form action="{% url 'search' %}" method="get">
+            <div class="form-row">
+                
+                <div class="form-group col-md-6">
+                    <label for="input_question">District: </label>
+                    <!-- <label for="input_question">District</label>
+                    
+                    <input type="text" class="form-control" id="input_question"></textarea> -->
+                    <select class="selectpicker" name="district">
+                        <option value="1">Central and Western</option>
+                        <option value="2">Eastern</option>
+                        <option value="3">Southern</option>
+                        <option value="4">Wan Chai</option>
+                        <option value="5">Sham Shui Po</option>
+                        <option value="6">Kowloon City</option>
+                        <option value="7">Kwun Tong</option>
+                        <option value="8">Wong Tai Sin</option>
+                        <option value="9">Yau Tsim Mong</option>
+                        <option value="10">Islands</option>
+                        <option value="11">Kwai Tsing</option>
+                        <option value="12">North</option>
+                        <option value="13">Sai Kung</option>
+                        <option value="14">Sha Tin</option>
+                        <option value="15">Tai Po</option>
+                        <option value="16">Tsuen Wan</option>
+                        <option value="17">Tuen Mun</option>
+                        <option value="18">Yuen Long</option>
+                        
+                        
+                    </select>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="window" id="label_window">Search Window: </label>
+                    
+                    <input type="range" name="window" class="custom-range" min="0" max="30" value="0" step="1" id="window" onchange="updateTextInput(this.value);">
+                    <output type="text" id="window_output" value="0">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="location">Location</label>
+                    <input type="text" name="location" class="form-control" id="location"></textarea>
+                </div>
+                <div class="form-group col-md-3">
+                    <label></label>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="btn-process">Search</button>
+                </div>
+            </div>
+            </form>
+
+            <!-- <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="wiki_link">URL used as reference context</label>
+                    <input type="text" class="form-control" id="wiki_link" readonly></input>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="text_paragraphs">Candidates paragraphs</label>
+                    <textarea class="form-control txt_input" id="text_paragraphs" readonly> </textarea>
+                </div>
+            </div>
+            <h4> Answers </h4>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="text_paragraphs">Albert</label>
+                    <textarea class="form-control txt_response" id="text_albert" readonly> </textarea>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="text_paragraphs">Electra</label>
+                    <textarea class="form-control txt_response" id="text_electra" readonly> </textarea>
+                </div>
+            </div> -->
+
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    {% for pa in patients %}
+    
+        <table class="table" border="1">
+            <thead>
+            <tr>
+                <th>Case Number</th>
+                <th>Name</th>
+                <th>Date Case Confirmed</th>
+            </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <th>ABC12345678</th>
+                    <th>Enoch</th>
+                    <th>April 6, 2020</th>
+                </tr> -->
+                
+                <tr class='clickable-row' >
+                    <th> {{ pa.case_no }}</th>
+                    <th> {{ pa.name }}</th>
+                    <th> {{ pa.date_of_confirmation }}</th>
+                    <!-- <th> {{ pa.id_document_no }}</th> -->
+                    <!-- <th> {{ pa.date_of_birth }}</th> -->
+                    
+                
+                </tr> 
+                
+            </tbody>
+        </table>
+        
+        <table class="table" border="1">
+            <thead>
+            
+            <tr>
+                <th>Case Number</th>
+                <th>Name</th>
+                <th>Date Case Confirmed</th>
+                <th>Common Location Visited</th>
+                <th>Date Visited by this patient (that identifies a poosible connection) </th>
+                <th>Detail (if any) </th>
+                <th>Date Visited by this selected patient (that identifies a poosible connection) </th>
+                <th>Detail (if any) </th>
+
+            </tr>
+            
+            </thead>
+            <tbody>
+            
+            {% for con  in connec|get_item:pa.case_no %}
+                <tr class='clickable-row' >
+                    {%  for v in con %}
+                        <th> {{ v }}</th>
+                    {%  endfor %}
+
+                    
+                    
+                    
+                    
+                    
+                
+                </tr> 
+                {% empty %}
+                <tr>Empty Record</tr>
+            {% endfor %}
+            
+                
+            </tbody>
+        </table>
+    {% endfor %}
+</body>
+
+</html>
+<!-- <a href="/records/">Back to records</a>
 <br>
 <table border="1">
   <thead>
@@ -30,4 +226,4 @@ jQuery(document).ready(function($) {
       window.location = $(this).data("href");
   });
 });
-</script>
+</script> -->
