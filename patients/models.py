@@ -36,11 +36,34 @@ class Locations_visited(models.Model):
         choices=Category_choices.choices,
         default=Category_choices.home
     )
-
-    case_no = models.ForeignKey(
-        Patients,
-        on_delete=models.CASCADE,
+    class District_choices(models.TextChoices):
+        
+        cw = "1", "Central and Western"
+        e = "2", "Eastern"
+        s = "3", "Southern"
+        wc = "4", "Wan Chai"
+        ssp = "5", "Sham Shui Po"
+        kc = "6", "Kowloon City"
+        kt = "7", "Kwun Tong"
+        wts = "8", "Wong Tai Sin"
+        ytm = "9", "Yau Tsim Mong"
+        i = "10", "Islands"
+        kwts = "11", "Kwai Tsing"
+        n = "12", "North"
+        sk = "13", "Sai Kung"
+        st = "14", "Sha Tin"
+        tp = "15", "Tai Po"
+        tw = "16", "Tsuen Wan"
+        tm = "17", "Tuen Mun"
+        yl = "18", "Yuen Long"
+    district = models.CharField(
+        max_length=10,
+        choices=District_choices.choices,
+        default=District_choices.cw
     )
+    
+
+    case_no = models.ManyToManyField(Patients)
 
     def __str__(self):
         return self.name

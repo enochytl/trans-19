@@ -121,55 +121,109 @@
         </div>
         <div class="col-sm-1"></div>
     </div>
-    <table class="table" border="1">
-        <thead>
-          <tr>
-            <th>Case Number</th>
-            <th>Name</th>
-            <th>Date Case Confirmed</th>
-          </tr>
-        </thead>
-        <tbody>
-            <!-- <tr>
-                <th>ABC12345678</th>
-                <th>Enoch</th>
-                <th>April 6, 2020</th>
-            </tr> -->
-            {% for pa in patients %}
-            <tr class='clickable-row' data-href="{% url 'profile' pa.case_no %}">
-                <th> {{ pa.case_no }}</th>
-                <th> {{ pa.name }}</th>
-                <th> {{ pa.date_of_confirmation }}</th>
-                <!-- <th> {{ pa.id_document_no }}</th> -->
-                <!-- <th> {{ pa.date_of_birth }}</th> -->
+
+    {% for pa in patients %}
+    
+        <table class="table" border="1">
+            <thead>
+            <tr>
+                <th>Case Number</th>
+                <th>Name</th>
+                <th>Date Case Confirmed</th>
+            </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <th>ABC12345678</th>
+                    <th>Enoch</th>
+                    <th>April 6, 2020</th>
+                </tr> -->
                 
+                <tr class='clickable-row' >
+                    <th> {{ pa.case_no }}</th>
+                    <th> {{ pa.name }}</th>
+                    <th> {{ pa.date_of_confirmation }}</th>
+                    <!-- <th> {{ pa.id_document_no }}</th> -->
+                    <!-- <th> {{ pa.date_of_birth }}</th> -->
+                    
+                
+                </tr> 
+                
+            </tbody>
+        </table>
+        
+        <table class="table" border="1">
+            <thead>
             
-            </tr> 
-            {% empty %}
-            <tr>Empty Record</tr>
+            <tr>
+                <th>Case Number</th>
+                <th>Name</th>
+                <th>Date Case Confirmed</th>
+                <th>Common Location Visited</th>
+                <th>Date Visited by this patient (that identifies a poosible connection) </th>
+                <th>Detail (if any) </th>
+                <th>Date Visited by this selected patient (that identifies a poosible connection) </th>
+                <th>Detail (if any) </th>
+
+            </tr>
+            
+            </thead>
+            <tbody>
+            
+            {% for con  in connec|get_item:pa.case_no %}
+                <tr class='clickable-row' >
+                    {%  for v in con %}
+                        <th> {{ v }}</th>
+                    {%  endfor %}
+
+                    
+                    
+                    
+                    
+                    
+                
+                </tr> 
+                {% empty %}
+                <tr>Empty Record</tr>
             {% endfor %}
-            <!-- {% for pa in patients %}
-          <tr>
-            <th> {{ lv.name }}</th>
-            <th> {{ lv.start_date }}</th>
-            <th> {{ lv.end_date }}</th>
-            <th> {{ lv.x }}</th>
-            <th> {{ lv.y }}</th>
-            <th> {{ lv.category }}</th>
-            <th> {% if lv.address_line_1 != None %} {{ lv.address_line_1 }} <br> {% endif %} 
-                 {% if lv.address_line_2 != None %} {{ lv.address_line_2 }} <br> {% endif %} 
-                  
-                  
-                  {% if lv.address_line_3 != None %} {{ lv.address_line_3 }} {% endif %} 
-                  
-            </th>
-            <th> {{ lv.description }}</th>
-          </tr> 
-          {% empty %}
-          <tr>Empty Record</tr>
-          {% endfor %} -->
-        </tbody>
-      </table>
+            
+                
+            </tbody>
+        </table>
+    {% endfor %}
 </body>
 
 </html>
+<!-- <a href="/records/">Back to records</a>
+<br>
+<table border="1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Identity Document Number</th>
+      <th>Date of Birth</th>
+      <th>Date on which the case was confirmed</th>
+      <th>Case Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pa in patients %}
+    <tr class='clickable-row' data-href="{% url 'profile' pa.case_no %}">
+      <th> {{ pa.name }}</th>
+      <th> {{ pa.id_document_no }}</th>
+      <th> {{ pa.date_of_birth }}</th>
+      <th> {{ pa.date_of_confirmation }}</th>
+      <th> {{ pa.case_no }}</th>
+    </tr> 
+    {% empty %}
+    <tr>Empty Record</tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $(".clickable-row").click(function() {
+      window.location = $(this).data("href");
+  });
+});
+</script> -->

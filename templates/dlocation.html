@@ -1,0 +1,41 @@
+<form action='/dlocation/' method = "post">
+
+<table border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>X-Coord</th>
+        <th>Y-Coord</th>
+        <th>Category</th>
+        <th>Address</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lv in locations_visited %}
+      <tr>
+        <th> {{ lv.name }}</th>
+        <th> {{ lv.start_date }}</th>
+        <th> {{ lv.end_date }}</th>
+        <th> {{ lv.x }}</th>
+        <th> {{ lv.y }}</th>
+        <th> {{ lv.category }}</th>
+        <th> {% if lv.address_line_1 != None %} {{ lv.address_line_1 }} <br> {% endif %} 
+             {% if lv.address_line_2 != None %} {{ lv.address_line_2 }} <br> {% endif %} 
+              
+              
+              {% if lv.address_line_3 != None %} {{ lv.address_line_3 }} {% endif %} 
+              
+        </th>
+        <th> {{ lv.description }}</th>
+        <th> <input type="checkbox" value = "{{lv.name}}" name = "check_box_list"> </th>
+      </tr> 
+      {% empty %}
+      <tr>Empty Record</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="submit" value = "submit">
+  </form>
