@@ -37,10 +37,7 @@ class Locations_visited(models.Model):
         default=Category_choices.home
     )
 
-    case_no = models.ForeignKey(
-        Patients,
-        on_delete=models.CASCADE,
-    )
+    case_no = models.ManyToManyField(Patients)
 
     def __str__(self):
         return self.name

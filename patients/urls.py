@@ -8,5 +8,10 @@ urlpatterns = [
         name="profile"
     ),
     re_path(r'^records/$', views.records),
-    re_path(r'^search/$', views.search),
+    re_path(r'^locations/$', views.locations, name='locations'),
+    path("dpatient/", views.dpatient, name = "dpatient"),
+    path("dlocation/", views.dlocation, name = 'dlocation'),
+    path("modify/", views.modify, name = 'modify'),
+#    path("modify/<slug:case_no>", views.Modify.as_view(), name = 'modify'),
+    
 ]
