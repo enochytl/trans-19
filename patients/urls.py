@@ -12,4 +12,9 @@ urlpatterns = [
         views.PatientProfile.as_view(),
         name="profile"
     ),
+    path(
+        "search/",
+        views.SearchPage.as_view(),
+        name="search"
+    ),
 ]
