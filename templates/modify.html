@@ -1,40 +1,12 @@
-<h1>Patient Profile</h1>
-<a href="/records/">Back to records</a>
-<br>
-<br>
-<table border="1">
-    <tr>
-        <th>Name: </th>
-        <th>{{ patient.name }}</th>
-    </tr>
-    <tr>
-        <th>Identity Document Number: </th>
-        <th>{{ patient.id_document_no }}</th>
-    </tr>
-    <tr>
-        <th>Date of Birth: </th>
-        <th>{{ patient.date_of_birth }}</th>
-    </tr>
-    <tr>
-        <th>Date on which the case was confirmed: </th>
-        <th>{{ patient.date_of_confirmation }}</th>
-    </tr>
-    <tr>
-        <th>Case Number: </th>
-        <th>{{ patient.case_no }}</th>
-    </tr>
-    <!-- <tr>
-      <th>Name</th>
-      <th>Identity Document Number</th>
-      <th>Date of Birth</th>
-      <th>Date on which the case was confirmed</th>
-      <th>Case Number</th>
-    </tr> -->
-    
-</table>
-  
-<br>
+<form action="{% url 'modify' %}" method="post" > 
 
+<select name = "patient">
+
+{% for p in patients %}
+  <option value = "{{ p.case_no }}" name = ""> {{p.name}}</option>
+{% endfor %}
+
+</select>
 
 <table border="1">
     <thead>
@@ -66,9 +38,13 @@
               
         </th>
         <th> {{ lv.description }}</th>
+        <th>      <input type="checkbox" value = "{{ lv.name }}" name = "check_box_list" checked = ""> </th>
       </tr> 
       {% empty %}
       <tr>Empty Record</tr>
       {% endfor %}
     </tbody>
-  </table>
+</table>
+
+<input type = "submit" value = "Save">
+</form>
