@@ -4,6 +4,26 @@
   <!-- <script src="/js/my.js"></script> -->
   </head>
 <h1>Showing all patient records</h1>
+
+<!-- Search Button Starts-->
+<form method="get" action="search">
+  <input type="search" placeholder="Patient Name" required>
+  <button type="submit">Search</button>
+</form>
+<!-- Search Button Enda-->
+
+<!-- Insert Starts-->
+<form action="/records/" method="post">
+    <p>NAME:<input name="name" placeholder="Name"/></p>
+    <p>ID Document No.<input name="id_document_no" placeholder="ID Document No."/></p>
+    <p>Date of Birth<input type="date" name="date_of_birth"  placeholder="Date of Birth"/></p>
+    <p>Date of Confirmation<input type="date" input name="date_of_confirmation" placeholder="Date of Confirmation"></p>
+    <p>Case No.<input name="case_no" placeholder="Case No."></p>
+    <p><input type="submit" value="submit" /></p>
+</form>
+
+<!-- Inster Ends -->
+
 <br>
 <table border="1">
   <thead>
