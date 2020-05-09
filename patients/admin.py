@@ -14,7 +14,7 @@ class PatientAdmin(admin.ModelAdmin):
 
 class LocationsAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'end_date', 'Coordinates', 'Address',
-                    'description', 'category')
+                    'district', 'description', 'category')
     list_editable = ('description', 'category')
     def Coordinates(self, obj):
         return "({}, {})".format(obj.x, obj.y)
