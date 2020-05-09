@@ -56,8 +56,6 @@ def locations(request):
     if request.method == "POST":
         Locations_visited.objects.create(
             name = request.POST['name'],
-            start_date = request.POST['start_date'],
-            end_date = request.POST['end_date'],
             x = request.POST['x'],
             y = request.POST['y'],
             address_line_1 = request.POST['address_line_1'],

@@ -14,8 +14,6 @@ class Patients(models.Model):
 
 class Locations_visited(models.Model):
     name = models.CharField(max_length = 50)
-    start_date = models.DateField()
-    end_date = models.DateField()
     x = models.DecimalField(max_digits=11, decimal_places=6)
     y = models.DecimalField(max_digits=11, decimal_places=6)
 
@@ -61,10 +59,13 @@ class Locations_visited(models.Model):
         choices=District_choices.choices,
         default=District_choices.cw
     )
-    
-
     case_no = models.ManyToManyField(Patients)
 
     def __str__(self):
         return self.name
 
+class date(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    case_no = models.ForeignKey(Patients, on_delete = models.CASCADE)
+    loc_name = models.ForeignKey(Locations_visited, on_delete = models.CASCADE)
