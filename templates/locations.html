@@ -1,24 +1,100 @@
-
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- <script src="/js/my.js"></script> -->
-    </head>
-  <h1>adding locations</h1>
-  
-  
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <!-- <script src="/js/my.js"></script> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<h1>Trans 19</h1>
+<br>
+<a href="/patients/">Back to page of patients</a>
+<br>
+<br>
+<p>Add a location:</p>
   <!-- Insert Starts-->
   <form action="/locations/" method="post">
-  <p><input name = "name" placeholder="name" required></p>              
-  <p><input type = "date"name = "start_date" placeholder="start_date" required></p>          
-  <p><input type = "date"name = "end_date" placeholder="end_date" required></p>         
-  <p><input name = "x" placeholder="x" required></p>         
-  <p><input name = "y" placeholder="y" required></p>         
-  <p><input name = "address_line_1" placeholder="address_line_1" required></p>       
-  <p><input name = "address_line_2" placeholder="address_line_2" ></p>          
-  <p><input name = "address_line_3" placeholder="address_line_3" ></p>          
-  <p><input name = "category" placeholder="category" required></p>        
-  <p><input name = "description" placeholder="description" required></p>   
-  <p><input type = "submit" value = "submit">
+  <p>Name <input name = "name" placeholder="name" required></p>
+  <p>Disctrict <input list = "districts" name = "district" required></p>
+    <datalist id="districts">
+      <option value='Central and Western'>
+      <option value='Eastern'>
+      <option value='Southern'>
+      <option value='Wan Chai'>
+      <option value='Sham Shui Po'>
+      <option value='Kowloon City'>
+      <option value='Kwun Tong'>
+      <option value='Wong Tai Sin'>
+      <option value='Yau Tsim Mong'>
+      <option value='Islands'>
+      <option value='Kwai Tsing'>
+      <option value='North'>
+      <option value='Sai Kung'>
+      <option value='Sha Tin'>
+      <option value='Tai Po'>
+      <option value='Tsuen Wan'>
+      <option value='Tuen Mun'>
+      <option value='Yuen Lung'>
+    </datalist>
+  <p>X coordinate <input name = "x" placeholder="x" required></p>         
+  <p>Y coordinate<input name = "y" placeholder="y" required></p>         
+  <p>Address line 1 <input name = "address_line_1" placeholder="address_line_1" required></p>       
+  <p>Address line 2 <input name = "address_line_2" placeholder="address_line_2" ></p>          
+  <p>Address line 3 <input name = "address_line_3" placeholder="address_line_3" ></p>          
+  <p>Category <input list = 'categories' name = "category" required></p>
+    <datalist id='categories'>
+      <option value='Home'>
+      <option value='Work'>
+      <option value='Vacation'>
+    </datalist>        
+  <p>Description <input name = "description" placeholder="description" required></p>   
+  <input type = "submit" name = "add_submit" value = "submit">
   </form>
   
   <!-- Inster Ends -->
+
+<br>
+<p>Showing all locations:</p>
+<form action='/locations/' method='post'>
+<table class="table" border="1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>District</th>
+      <th>Coordinates (x, y)</th>
+      <th>Address</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Select</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lo in locations %}
+      <th> {{ lo.name }}</th>
+      <th> {{ lo.district }} </th>
+      <th> ({{ lo.x }}, {{ lo.y }})</th>
+      <th> {{ lo.address_line_1 }} {{ lo.address_line_2 }} {{ lo.address_line_3 }}</th>
+      <th> {{ lo.category }}</th>
+      <th> {{ lo.description }}</th>
+      <th>
+        <input type='checkbox' value='{{ lo.name }}' name='check_box_list'>
+      </th>
+    </tr> 
+    {% empty %}
+    <tr>Empty Record</tr>
+    {% endfor %}
+  </tbody>
+</table>
+<input type='submit' name='delete_submit' value='Delete selected locations'>
+</form>
+
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $(".clickable-row").click(function() {
+      window.location = $(this).data("href");
+  });
+});
+</script>

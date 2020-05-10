@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class Patients(models.Model):
+class Patient(models.Model):
     name = models.CharField(max_length = 50)
     
     id_document_no  = models.CharField(max_length = 50)
@@ -12,7 +12,7 @@ class Patients(models.Model):
     def __str__(self):
         return self.name
 
-class Locations_visited(models.Model):
+class Location(models.Model):
     name = models.CharField(max_length = 50)
     x = models.DecimalField(max_digits=11, decimal_places=6)
     y = models.DecimalField(max_digits=11, decimal_places=6)
@@ -59,13 +59,15 @@ class Locations_visited(models.Model):
         choices=District_choices.choices,
         default=District_choices.cw
     )
-    case_no = models.ManyToManyField(Patients)
 
     def __str__(self):
         return self.name
 
-class date(models.Model):
+class VisitingRecord(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
-    case_no = models.ForeignKey(Patients, on_delete = models.CASCADE)
-    loc_name = models.ForeignKey(Locations_visited, on_delete = models.CASCADE)
+    loc = models.ForeignKey(Location, null=True, on_delete=models.CASCADE)
+    case_no = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.case_no

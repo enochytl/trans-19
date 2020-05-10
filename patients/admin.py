@@ -12,8 +12,8 @@ class PatientAdmin(admin.ModelAdmin):
     list_filter = ('date_of_confirmation', 'date_of_birth')
     search_fields = ('name', 'id_document_no', 'case_no')
 
-class LocationsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_date', 'end_date', 'Coordinates', 'Address',
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'Coordinates', 'Address',
                     'district', 'description', 'category')
     list_editable = ('description', 'category')
     def Coordinates(self, obj):
@@ -25,8 +25,9 @@ class LocationsAdmin(admin.ModelAdmin):
         line3 = '' if (obj.address_line_3 is None) else obj.address_line_3
         return "{} {} {}".format(line1, line2, line3) 
 
-admin.site.register(Patients, PatientAdmin)
+admin.site.register(Patient, PatientAdmin)
 
-admin.site.register(Locations_visited, LocationsAdmin)
+admin.site.register(Location, LocationAdmin)
 
+admin.site.register(VisitingRecord)
 admin.site.unregister(Group)

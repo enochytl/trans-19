@@ -4,13 +4,12 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
         <th>X-Coord</th>
         <th>Y-Coord</th>
         <th>Category</th>
         <th>Address</th>
         <th>Description</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -20,12 +19,10 @@
         <th> {{ lv.x }}</th>
         <th> {{ lv.y }}</th>
         <th> {{ lv.category }}</th>
-        <th> {% if lv.address_line_1 != None %} {{ lv.address_line_1 }} <br> {% endif %} 
+        <th>
+             {% if lv.address_line_1 != None %} {{ lv.address_line_1 }} <br> {% endif %} 
              {% if lv.address_line_2 != None %} {{ lv.address_line_2 }} <br> {% endif %} 
-              
-              
-              {% if lv.address_line_3 != None %} {{ lv.address_line_3 }} {% endif %} 
-              
+             {% if lv.address_line_3 != None %} {{ lv.address_line_3 }} {% endif %} 
         </th>
         <th> {{ lv.description }}</th>
         <th> <input type="checkbox" value = "{{lv.name}}" name = "check_box_list"> </th>

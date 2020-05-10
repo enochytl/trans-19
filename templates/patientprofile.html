@@ -6,7 +6,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <h1>Patient Profile</h1>
-<a href="/records/">Back to records</a>
+<a href="/patients/">Back to all patients</a>
 <br>
 <br>
 <table border="1" class="table">
@@ -40,38 +40,73 @@
     
 </table>
 
+<p>Add a visiting record:</p>
+<!-- Insert Starts-->
+<form action="{% url 'patients_profile' patient.case_no %}" method="post">
+  <p>Location <input list="locations" name="location" placeholder="Select from database" required></p>
+    <datalist id="locations">
+      {% for lo in locations %}
+        <option value={{ lo.name }}>
+      {% endfor %}
+    </datalist>
+  <p>Start Date <input type="date" name="start_date" placeholder="Start Date" required></p>
+  <p>End Date <input type="date" name="end_date" placeholder="End Date" required></p>
+  <p><input type="submit" name="add_submit" value="Add visiting record" /></p>
+</form>
+<!-- Inster Ends -->
+
+
 <h1>Locations Visited</h1>
   
 <br>
 
-
+<form action="{% url 'patients_profile' patient.case_no %}" method="post">
   <table class="table" border="1">
     <thead>
       <tr>
         <th>Name</th>
-        <th>X-Coord</th>
-        <th>Y-Coord</th>
-        <th>Category</th>
+        <th>Date From</th>
+        <th>Date To</th>
+        <th>District</th>
+        <th>Coordinates (x, y)</th>
         <th>Address</th>
+        <th>Category</th>
         <th>Description</th>
+        <th>Select</th>
       </tr>
     </thead>
     <tbody>
-      {% for lv in locations_visited %}
+      {% for vr in visiting_records %}
       <tr>
-        <th> {{ lv.name }}</th>
-        <th> {{ lv.x }}</th>
-        <th> {{ lv.y }}</th>
-        <th> {{ lv.category }}</th>
-        <th> {% if lv.address_line_1 != None %} {{ lv.address_line_1 }} <br> {% endif %} 
-             {% if lv.address_line_2 != None %} {{ lv.address_line_2 }} <br> {% endif %} 
-              {% if lv.address_line_3 != None %} {{ lv.address_line_3 }} {% endif %} 
-              
+        <th> {{ vr.loc.name }} </th>
+        <th> {{ vr.start_date }} </th>
+        <th> {{ vr.end_date }} </th>
+        <th> {{ vr.loc.district }} </th>
+        <th> ({{ vr.loc.x }}, {{ vr.loc.y }}) </th>
+        <th>
+             {% if vr.loc.address_line_1 != None %} {{ vr.loc.address_line_1 }} <br> {% endif %} 
+             {% if vr.loc.address_line_2 != None %} {{ vr.loc.address_line_2 }} <br> {% endif %} 
+             {% if vr.loc.address_line_3 != None %} {{ vr.loc.address_line_3 }} {% endif %} 
         </th>
-        <th> {{ lv.description }}</th>
+        <th> {{ vr.loc.category }}</th>
+        <th> {{ vr.loc.description }}</th>
+        <th> 
+          <input type='checkbox' value="{{ vr.id }}" name='check_box_list'>
+        </th>
       </tr> 
       {% empty %}
       <tr>Empty Record</tr>
       {% endfor %}
     </tbody>
   </table>
+<input type='submit' name='delete_submit' value='Delete selected visiting records'>
+</form>
+
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $(".clickable-row").click(function() {
+      window.location = $(this).data("href");
+  });
+});
+</script>
