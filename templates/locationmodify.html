@@ -1,0 +1,81 @@
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<h1>Trans 19</h1>
+<a href="{% url 'locations' %}">Back to all locations</a>
+<br>
+<br>
+<p>Modify this location's information</p>
+<form action="{% url 'locations_modify' location.id %}" method="post">
+<table border="1" class="table">
+
+    <tr>
+          <th>Name: </th>
+          <th><input name = "name" class="form-control" value={{ location.name }} required></th>
+      </tr>
+      <tr>
+        <th>Disctrict: </th>
+        <th><select name = "district" class="form-control" required>
+            <option value='Central and Western'>Central and Western</option>
+            <option value='Eastern'>Eastern</option>
+            <option value='Southern'>Southern</option>
+            <option value='Wan Chai'>Wan Chai</option>
+            <option value='Sham Shui Po'>Sham Shui Po</option>
+            <option value='Kowloon City'>Kowloon City</option>
+            <option value='Kwun Tong'>Kwun Tong</option>
+            <option value='Wong Tai Sin'>Wong Tai Sin</option>
+            <option value='Yau Tsim Mong'>Yau Tsim Mong</option>
+            <option value='Islands'>Islands</option>
+            <option value='Kwai Tsing'>Kwai Tsing</option>
+            <option value='North'>North</option>
+            <option value='Sai Kung'>Sai Kung</option>
+            <option value='Sha Tin'>Sha Tin</option>
+            <option value='Tai Po'>Tai Po</option>
+            <option value='Tsuen Wan'>Tsuen Wan</option>
+            <option value='Tuen Mun'>Tuen Mun</option>
+            <option value='Yuen Lung'>Yuen Lung</option>
+            </select>
+        </th>
+      </tr>
+      <tr>
+        <th>X coordinate: </th>
+        <th><input name = "x" class="form-control" value={{ location.x }} required></th>
+      </tr>
+      <tr>
+        <th>Y coordinate: </th>
+        <th><input name = "y" class="form-control" value={{ location.y }} required></th>
+      </tr>
+      <tr>
+        <th>Address line 1: </th>
+        <th><input name = "address_line_1" class="form-control" value={{ location.address_line_1 }} required></th>
+      </tr>
+      <tr>
+        <th>Address line 2: </th>
+        <th><input name = "address_line_2" class="form-control" value={{ location.address_line_2 }}></th>
+      </tr>
+      <tr>
+        <th>Address line 3: </th>
+        <th><input name = "address_line_3" class="form-control" value={{ location.address_line_3 }}></th>
+      </tr>
+      <tr>
+        <th>Category: </th>
+        <th><select name = "category" class="form-control" required>
+            <option value='Home'>Home</option>
+            <option value='Work'>Work</option>
+            <option value='Vacation'>Vacation</option>
+            </select>
+        </th>    
+      </tr>
+      <tr>
+        <th>Description: </th>
+        <th><input name = "description" class="form-control" value={{ description }} required></th>
+      </tr>
+    
+</table>
+<p><input type="submit" name="add_submit" value="Save" /></p>
+</form>

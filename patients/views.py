@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from patients.models import Patient, Location, VisitingRecord
 from django.db.models import Q
@@ -15,10 +16,6 @@ def get_item(dictionary, key):
 class PatientProfile(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         page_case_no = self.kwargs["case_no"]
-
-#       context = super().get_context_data(**kwargs)
-#       context["patient"] = Patient.objects.get(pk=page_case_no)
-#       context["visiting_records"] = VisitingRecord.objects.filter(case_no=page_case_no)
     
         if request.method == "POST":
             if 'add_submit' in request.POST:
@@ -54,25 +51,14 @@ def patients(request):
             for item in delete_list:
                 Patient.objects.filter(case_no = item).delete()
 
+                # delete all visiting records associated with patients to be deleted
+                recordList = VisitingRecord.objects.filter(case_no=item)
+                for record in recordList:
+                    record.delete()
+
     user_list_obj = Patient.objects.all()
     return render(request, 'patients.html', {'patients': user_list_obj})
 
-def dpatient(request):
-    if request.method == "POST":
-        delete_list = request.POST.getlist('check_box_list')
-        for item in delete_list:
-            Patient.objects.filter(case_no = item).delete()
-    user_list_obj = Patient.objects.all()
-    return render(request, 'patients.html', {'patients': user_list_obj})
-
-def dlocation(request):
-    if request.method == "POST":
-        delete_list = request.POST.getlist('check_box_list')
-        print(delete_list)
-        for item in delete_list:
-            Location.objects.filter(name = item).delete()
-    user_list_obj = Location.objects.all()
-    return render(request, 'dlocation.html', {'locations_visited': user_list_obj})
 
 def locations(request):
     if request.method == "POST":
@@ -93,22 +79,89 @@ def locations(request):
             print(delete_list)
             for item in delete_list:
                 Location.objects.filter(name = item).delete()
+
     user_list_obj = Location.objects.all()
     return render(request, 'locations.html', {'locations':user_list_obj})
 
-class Modify(TemplateView):
+class patientModify(TemplateView):
+    template_name = "patientmodify.html"
 
-    template_name = "modify.html"
+    def post(self, request, **kwargs):
+        old_case_no = self.kwargs["case_no"]
+        new_case_no = old_case_no
+        if request.method == 'POST':
+            new_case_no = request.POST['new_case_no']
+            patient = Patient.objects.get(pk=old_case_no) 
+            patient.name = request.POST['name'] 
+            patient.id_document_no = request.POST['id_document_no']
+            patient.date_of_birth = request.POST['date_of_birth']
+            patient.date_of_confirmation = request.POST['date_of_confirmation']
+            patient.case_no = new_case_no
+            patient.save()
+            Patient.objects.get(pk=old_case_no).delete()
+
+            # modify all visiting records associated with patient to be changed
+            changeList = VisitingRecord.objects.filter(case_no=old_case_no)
+            for item in changeList:
+                item.case_no = new_case_no
+                item.save()
+        return redirect('/patients/') 
+
+    def get_context_data(self, **kwargs):
+        case_no = self.kwargs['case_no']
+        context = super().get_context_data(**kwargs)
+        context['patient'] = Patient.objects.get(pk=case_no)
+        return context
+
+
+class recordModify(TemplateView):
+    template_name = "recordmodify.html"
+
     def post(self, request, **kwargs):
         case_no = self.kwargs["case_no"]
-        check_list = request.POST.getlist('check_box_list')
-        user_list_obj = Location.objects.all()
-        return render(request, "{% url 'modify' case_no %}", {'locations_visited': user_list_obj})
+        record_id = self.kwargs['record_id'] 
+        if request.method == 'POST':
+            record = VisitingRecord.objects.get(id=record_id)
+            record.start_date = request.POST['start_date']
+            record.end_date = request.POST['end_date']
+            record.loc = Location.objects.get(name=request.POST['location'])
+            record.save()
+
+        return redirect('/patients/'+case_no) 
+
     def get_context_data(self, **kwargs):
-        case_no = self.kwargs["case_no"]
+        case_no = self.kwargs['case_no']
+        record_id = self.kwargs['record_id']        
         context = super().get_context_data(**kwargs)
-        context["patient"] = Patient.objects.get(pk = case_no)
-        context["locations_visited"] = Location.objects.filter(case_no=case_no)
+        context['patient'] = Patient.objects.get(case_no=case_no)
+        context['locations'] = Location.objects.all()
+        context['record'] = VisitingRecord.objects.get(id=record_id)
+        return context
+
+class locationModify(TemplateView):
+    template_name = "locationmodify.html"
+
+    def post(self, request, **kwargs):
+        if request.method == 'POST':
+            location_id = self.kwargs["location_id"]
+            location = Location.objects.get(id=location_id)
+            location.name = request.POST['name']
+            location.x = request.POST['x']
+            location.y = request.POST['y']
+            location.address_line_1 = request.POST['address_line_1']
+            location.address_line_2 = request.POST['address_line_2']
+            location.address_line_3 = request.POST['address_line_3']
+            location.category = request.POST['category']
+            location.description = request.POST['description']
+            location.district = request.POST['district']
+            location.save()
+
+        return redirect('/locations/') 
+
+    def get_context_data(self, **kwargs):
+        location_id = self.kwargs["location_id"]
+        context = super().get_context_data(**kwargs)
+        context['location'] = Location.objects.get(id=location_id)
         return context
 
 class SearchPage(TemplateView):
@@ -165,14 +218,3 @@ class SearchPage(TemplateView):
         context["location"] = location
         # context["locations_visited"] = Location.objects.filter(case_no=case_no)
         return context
-
-def modify(request, *wargs, **kwargs):
-    if request.method == "POST":
-        p_id = request.POST["patient"]
-        loc_list = request.POST.getlist('check_box_list')
-        for item in loc_list:
-            Location.objects.get(name = item).case_no.add(p_id)
-    p_list_obj = Patient.objects.all()
-    loc_list_obj = Location.objects.all()
-    return render(request, "modify.html", {'patients' : p_list_obj, 'locations_visited': loc_list_obj})
-

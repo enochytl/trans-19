@@ -1,4 +1,4 @@
-
+ 
 <head>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -15,12 +15,31 @@
 <p>Add a patient:</p>
 <!-- Insert Starts-->
 <form action="/patients/" method="post">
-  <p>Name <input name="name" placeholder="Name" required></p>
-  <p>ID Document No. <input name="id_document_no" placeholder="ID Document No." required></p>
-  <p>Date of Birth <input type="date" name="date_of_birth"  placeholder="Date of Birth" required></p>
-  <p>Date of Confirmation <input type="date" input name="date_of_confirmation" placeholder="Date of Confirmation" required></p>
-  <p>Case No. <input name="case_no" placeholder="Case No." required></p>
-  <p><input type="submit" name="add_submit" value="Add patient" /></p>
+<table border="1" class="table">
+
+    <tr>
+        <th>Name: </th>
+        <th><input name="name" class="form-control" placeholder="Name" required></th>
+    </tr>
+    <tr>
+        <th>Identity Document Number: </th>
+        <th><input name="id_document_no" class="form-control" placeholder="ID Document No." required></th>
+    </tr>
+    <tr>
+        <th>Date of Birth: </th>
+        <th><input type="date" name="date_of_birth" class="form-control" placeholder="Date of Birth" required></th>
+    </tr>
+    <tr>
+        <th>Date on which the case was confirmed: </th>
+        <th><input type="date" name="date_of_confirmation" class="form-control" placeholder="Date of Confirmation" required></th>
+    </tr>
+    <tr>
+        <th>Case Number: </th>
+        <th><input name="case_no" class="form-control" placeholder="Case No." required></th>
+    </tr>
+    
+</table>
+<p><input type="submit" name="add_submit" value="Add patient" /></p>
 </form>
 <!-- Inster Ends -->
 
@@ -35,6 +54,7 @@
       <th>Date of Birth</th>
       <th>Date on which the case was confirmed</th>
       <th>Case Number</th>
+      <th>Change</th>
       <th>Profile</th>
       <th>Select</th>
     </tr>
@@ -46,6 +66,10 @@
       <th> {{ pa.date_of_birth }}</th>
       <th> {{ pa.date_of_confirmation }}</th>
       <th> {{ pa.case_no }}</th>
+      <th>
+        <button type='button' onclick="window.location.href='{% url 'patients_modify' pa.case_no %}'">
+          Change
+      </th>
       <th>
         <button type='button' onclick="window.location.href='{% url 'patients_profile' pa.case_no %}'">
           View Profile

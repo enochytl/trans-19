@@ -16,40 +16,72 @@
 <p>Add a location:</p>
   <!-- Insert Starts-->
   <form action="/locations/" method="post">
-  <p>Name <input name = "name" placeholder="name" required></p>
-  <p>Disctrict <input list = "districts" name = "district" required></p>
-    <datalist id="districts">
-      <option value='Central and Western'>
-      <option value='Eastern'>
-      <option value='Southern'>
-      <option value='Wan Chai'>
-      <option value='Sham Shui Po'>
-      <option value='Kowloon City'>
-      <option value='Kwun Tong'>
-      <option value='Wong Tai Sin'>
-      <option value='Yau Tsim Mong'>
-      <option value='Islands'>
-      <option value='Kwai Tsing'>
-      <option value='North'>
-      <option value='Sai Kung'>
-      <option value='Sha Tin'>
-      <option value='Tai Po'>
-      <option value='Tsuen Wan'>
-      <option value='Tuen Mun'>
-      <option value='Yuen Lung'>
-    </datalist>
-  <p>X coordinate <input name = "x" placeholder="x" required></p>         
-  <p>Y coordinate<input name = "y" placeholder="y" required></p>         
-  <p>Address line 1 <input name = "address_line_1" placeholder="address_line_1" required></p>       
-  <p>Address line 2 <input name = "address_line_2" placeholder="address_line_2" ></p>          
-  <p>Address line 3 <input name = "address_line_3" placeholder="address_line_3" ></p>          
-  <p>Category <input list = 'categories' name = "category" required></p>
-    <datalist id='categories'>
-      <option value='Home'>
-      <option value='Work'>
-      <option value='Vacation'>
-    </datalist>        
-  <p>Description <input name = "description" placeholder="description" required></p>   
+
+    <table border="1" class="table">
+
+      <tr>
+          <th>Name: </th>
+          <th><input name = "name" class="form-control" placeholder="name" required></th>
+      </tr>
+      <tr>
+        <th>Disctrict: </th>
+        <th><select name = "district" class="form-control" required>
+            <option value='Central and Western'>Central and Western</option>
+            <option value='Eastern'>Eastern</option>
+            <option value='Southern'>Southern</option>
+            <option value='Wan Chai'>Wan Chai</option>
+            <option value='Sham Shui Po'>Sham Shui Po</option>
+            <option value='Kowloon City'>Kowloon City</option>
+            <option value='Kwun Tong'>Kwun Tong</option>
+            <option value='Wong Tai Sin'>Wong Tai Sin</option>
+            <option value='Yau Tsim Mong'>Yau Tsim Mong</option>
+            <option value='Islands'>Islands</option>
+            <option value='Kwai Tsing'>Kwai Tsing</option>
+            <option value='North'>North</option>
+            <option value='Sai Kung'>Sai Kung</option>
+            <option value='Sha Tin'>Sha Tin</option>
+            <option value='Tai Po'>Tai Po</option>
+            <option value='Tsuen Wan'>Tsuen Wan</option>
+            <option value='Tuen Mun'>Tuen Mun</option>
+            <option value='Yuen Lung'>Yuen Lung</option>
+            </select>
+        </th>
+      </tr>
+      <tr>
+        <th>X coordinate: </th>
+        <th><input name = "x" class="form-control" placeholder="x" required></th>
+      </tr>
+      <tr>
+        <th>Y coordinate: </th>
+        <th><input name = "y" class="form-control" placeholder="y" required></th>
+      </tr>
+      <tr>
+        <th>Address line 1: </th>
+        <th><input name = "address_line_1" class="form-control" placeholder="address_line_1" required></th>
+      </tr>
+      <tr>
+        <th>Address line 2: </th>
+        <th><input name = "address_line_2" class="form-control" placeholder="address_line_2"></th>
+      </tr>
+      <tr>
+        <th>Address line 3: </th>
+        <th><input name = "address_line_3" class="form-control" placeholder="address_line_3"></th>
+      </tr>
+      <tr>
+        <th>Category: </th>
+        <th><select name = "category" class="form-control" required>
+            <option value='Home'>Home</option>
+            <option value='Work'>Work</option>
+            <option value='Vacation'>Vacation</option>
+            </select>
+        </th>    
+      </tr>
+      <tr>
+        <th>Description: </th>
+        <th><input name = "description" class="form-control" placeholder="description" required></th>
+      </tr>
+    
+    </table>         
   <input type = "submit" name = "add_submit" value = "submit">
   </form>
   
@@ -67,6 +99,7 @@
       <th>Address</th>
       <th>Category</th>
       <th>Description</th>
+      <th>Change</th>
       <th>Select</th>
     </tr>
   </thead>
@@ -78,6 +111,11 @@
       <th> {{ lo.address_line_1 }} {{ lo.address_line_2 }} {{ lo.address_line_3 }}</th>
       <th> {{ lo.category }}</th>
       <th> {{ lo.description }}</th>
+      <th>
+        <button type='button' onclick="window.location.href='{% url 'locations_modify' lo.id %}'">
+          Change
+        </button>
+      </th>
       <th>
         <input type='checkbox' value='{{ lo.name }}' name='check_box_list'>
       </th>
