@@ -49,31 +49,14 @@
             <div class="form-row">
                 
                 <div class="form-group col-md-6">
-                    <label for="input_question">District: </label>
+                    <label for="input_question">Patient </label>
                     <!-- <label for="input_question">District</label>
                     
                     <input type="text" class="form-control" id="input_question"></textarea> -->
-                    <select class="selectpicker" name="district">
-                        <option value="1">Central and Western</option>
-                        <option value="2">Eastern</option>
-                        <option value="3">Southern</option>
-                        <option value="4">Wan Chai</option>
-                        <option value="5">Sham Shui Po</option>
-                        <option value="6">Kowloon City</option>
-                        <option value="7">Kwun Tong</option>
-                        <option value="8">Wong Tai Sin</option>
-                        <option value="9">Yau Tsim Mong</option>
-                        <option value="10">Islands</option>
-                        <option value="11">Kwai Tsing</option>
-                        <option value="12">North</option>
-                        <option value="13">Sai Kung</option>
-                        <option value="14">Sha Tin</option>
-                        <option value="15">Tai Po</option>
-                        <option value="16">Tsuen Wan</option>
-                        <option value="17">Tuen Mun</option>
-                        <option value="18">Yuen Long</option>
-                        
-                        
+                    <select class="selectpicker" name="key_patient">
+                    {% for p in allpatients %}
+                    <option value = "{{ p.case_no }}">{{p.name}}</option>                        
+                    {% endfor %}
                     </select>
                 </div>
                 
@@ -82,10 +65,6 @@
                     
                     <input type="range" name="window" class="custom-range" min="0" max="30" value="0" step="1" id="window" onchange="updateTextInput(this.value);">
                     <output type="text" id="window_output" value="0">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="location">Location</label>
-                    <input type="text" name="location" class="form-control" id="location"></textarea>
                 </div>
                 <div class="form-group col-md-3">
                     <label></label>
@@ -140,9 +119,9 @@
                 </tr> -->
                 
                 <tr class='clickable-row' >
-                    <th> {{ pa.case_no }}</th>
-                    <th> {{ pa.name }}</th>
-                    <th> {{ pa.date_of_confirmation }}</th>
+                    <th> {{ key_patient.case_no }}</th>
+                    <th> {{ key_patient.name }}</th>
+                    <th> {{ key_patient.date_of_confirmation }}</th>
                     <!-- <th> {{ pa.id_document_no }}</th> -->
                     <!-- <th> {{ pa.date_of_birth }}</th> -->
                     
@@ -194,36 +173,3 @@
 </body>
 
 </html>
-<!-- <a href="/records/">Back to records</a>
-<br>
-<table border="1">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Identity Document Number</th>
-      <th>Date of Birth</th>
-      <th>Date on which the case was confirmed</th>
-      <th>Case Number</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for pa in patients %}
-    <tr class='clickable-row' data-href="{% url 'profile' pa.case_no %}">
-      <th> {{ pa.name }}</th>
-      <th> {{ pa.id_document_no }}</th>
-      <th> {{ pa.date_of_birth }}</th>
-      <th> {{ pa.date_of_confirmation }}</th>
-      <th> {{ pa.case_no }}</th>
-    </tr> 
-    {% empty %}
-    <tr>Empty Record</tr>
-    {% endfor %}
-  </tbody>
-</table>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-  $(".clickable-row").click(function() {
-      window.location = $(this).data("href");
-  });
-});
-</script> -->

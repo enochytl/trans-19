@@ -170,51 +170,47 @@ class SearchPage(TemplateView):
     def get_context_data(self, **kwargs):
         # case_no = self.kwargs["case_no"]
 
-        district_val = self.request.GET.get('district')
+        key_patient = self.request.GET.get('key_patient')
         window = self.request.GET.get('window')
-        location = self.request.GET.get('location')
-        patients = []
-
+        patients = set()
         connec = {}
-        if district_val and window and location:
-
-            patients_no  = list(Location.objects.filter(Q(name__icontains=location)).filter(district = district_val).values_list("case_no", flat=True).distinct())
-            print("patient no: ", patients_no)
-            patients = Patient.objects.filter(pk__in=patients_no)
-            for pa in patients:
-                pa_visted = Location.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(case_no=pa)
-                for pav in pa_visted:
-                    start_date = pav.start_date - timedelta(days = int(window))
-                    print("start: ",start_date)
-                    print("start: ",type(start_date))
-                    end_date = pav.start_date + timedelta(days = int(window))
-                    print("end: ", end_date)
-                    print("end: ", type(end_date))
-                    covisited_start = Location.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(start_date__range=( start_date, end_date ) )
-                    covisited_end = Location.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(end_date__range=( start_date, end_date ) )
-                    # covisited_end = Location.objects.filter(Q(name__icontains=location)).filter(district = district_val).filter(start_date_range=[pav.end_date-timedelta( end_date_range=[pav.start_date-timedelta(days = int(window)), pav.start_date + timedelta(days = int(window))])
-                    covisited = covisited_start | covisited_end
-                    print("covisited: ",covisited)
-                    # covisited = covisited_start.union(covisited_end)
-
-                    for tmp in covisited:
-                        print("tmp:", tmp.case_no.all())
-                        if pa.case_no not in  connec:
-                            connec[pa.case_no] = []
-                        print("tmp.case_no:",tmp.case_no)
+        if key_patient and window:
+            vrecords = VisitingRecord.objects.filter(case_no = key_patient)
+            print(vrecords)
+            for v in vrecords:
+                all_visit = VisitingRecord.objects.filter(loc = v.loc)
+                s_date = v.start_date - timedelta(days = int(window))
+                print("s: ",s_date)
+                print("s: ",type(s_date))
+                e_date = v.start_date + timedelta(days = int(window))
+                print("e: ", e_date)
+                print("e: ", type(e_date))
+                for av in all_visit:
+                    if (av.case_no == v.case_no):
+                        continue
+                    as_date = av.start_date
+                    ae_date = av.end_date
+                    if (not ((s_date < e_date < as_date < ae_date) or (as_date < ae_date < s_date < e_date))):
+                        patients.add(Patient.objects.get(case_no = av.case_no))
+                        if av.case_no not in  connec:
+                            connec[av.case_no] = []
+                        print("av.case_no:",av.case_no)
                         # print("tmp.case_no:",tmp.case_no==patients.Patient.None)
-                        for case in tmp.case_no.all():
-                            # tmp_pa = Patients.objects.get(pk = tmp.case_no)
-                            if case.case_no != pa.case_no:
-                                connec[pa.case_no].append([case.case_no, case.name, case.date_of_confirmation, tmp.name, tmp.start_date, tmp.description, pav.start_date, pav.description])
-
-
+                        connec[av.case_no].append([
+                            av.case_no,
+                            Patient.objects.get(case_no = av.case_no).name,
+                            Patient.objects.get(case_no = av.case_no).date_of_confirmation,
+                            Location.objects.get(name = av.loc).name,
+                            av.start_date,
+                            Location.objects.get(name = v.loc).name,
+                            v.start_date
+                            ])
         context = super().get_context_data(**kwargs)
         context["patients"] = patients
+        context["allpatients"] = Patient.objects.all()
+        context["key_patient"] = Patient.objects.get(case_no = key_patient)
         print("connec:",connec)
         context["connec"] = connec
-        context["district"] = district_val
         context["window"] = window
-        context["location"] = location
         # context["locations_visited"] = Location.objects.filter(case_no=case_no)
         return context
