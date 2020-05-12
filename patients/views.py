@@ -208,7 +208,8 @@ class SearchPage(TemplateView):
         context = super().get_context_data(**kwargs)
         context["patients"] = patients
         context["allpatients"] = Patient.objects.all()
-        context["key_patient"] = Patient.objects.get(case_no = key_patient)
+        if (key_patient):
+            context["key_patient"] = Patient.objects.get(case_no = key_patient)
         print("connec:",connec)
         context["connec"] = connec
         context["window"] = window
