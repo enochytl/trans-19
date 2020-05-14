@@ -7,13 +7,25 @@ from datetime import datetime, timedelta
 
 from django.template.defaulttags import register
 
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
 
 # Create your views here.
 
-class PatientProfile(TemplateView):
+
+class PatientProfile(LoginRequiredMixin, TemplateView):
+    # @login_required
     def dispatch(self, request, *args, **kwargs):
         page_case_no = self.kwargs["case_no"]
     
@@ -35,7 +47,7 @@ class PatientProfile(TemplateView):
                        "locations": Location.objects.all()})
 
 
-
+@login_required
 def patients(request):
     if request.method == "POST":
         if 'add_submit' in request.POST:
@@ -59,7 +71,7 @@ def patients(request):
     user_list_obj = Patient.objects.all()
     return render(request, 'patients.html', {'patients': user_list_obj})
 
-
+@login_required
 def locations(request):
     if request.method == "POST":
         if 'add_submit' in request.POST:
@@ -83,7 +95,7 @@ def locations(request):
     user_list_obj = Location.objects.all()
     return render(request, 'locations.html', {'locations':user_list_obj})
 
-class patientModify(TemplateView):
+class patientModify(LoginRequiredMixin, TemplateView):
     template_name = "patientmodify.html"
 
     def post(self, request, **kwargs):
@@ -114,7 +126,7 @@ class patientModify(TemplateView):
         return context
 
 
-class recordModify(TemplateView):
+class recordModify(LoginRequiredMixin, TemplateView):
     template_name = "recordmodify.html"
 
     def post(self, request, **kwargs):
@@ -138,7 +150,7 @@ class recordModify(TemplateView):
         context['record'] = VisitingRecord.objects.get(id=record_id)
         return context
 
-class locationModify(TemplateView):
+class locationModify(LoginRequiredMixin, TemplateView):
     template_name = "locationmodify.html"
 
     def post(self, request, **kwargs):
@@ -164,9 +176,24 @@ class locationModify(TemplateView):
         context['location'] = Location.objects.get(id=location_id)
         return context
 
-class SearchPage(TemplateView):
+def epidemiologists(user):
+    if user.user_type == 2 or user.is_superuser or user.is_staff:
+        return True
+    return False
+
+class SearchPage(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "search.html"
 
+    def test_func(self):
+        # print("UserDir: ", dir(self.request.user))
+        if self.request.user.is_authenticated:
+            if self.request.user.user_type == 2 or self.request.user.is_superuser or self.request.user.is_staff:
+                return True
+        return False
+    def handle_no_permission(self):
+        return redirect('denied')
+    
+    # @user_passes_test(epidemiologists, login_url='denied/')
     def get_context_data(self, **kwargs):
         # case_no = self.kwargs["case_no"]
 
@@ -215,4 +242,97 @@ class SearchPage(TemplateView):
         context["connec"] = connec
         context["window"] = window
         # context["locations_visited"] = Location.objects.filter(case_no=case_no)
+        return context
+
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, REDIRECT_FIELD_NAME
+from django.contrib.auth.tokens import default_token_generator
+# from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (
+    LogoutView as BaseLogoutView, PasswordChangeView as BasePasswordChangeView,
+    PasswordResetDoneView as BasePasswordResetDoneView, PasswordResetConfirmView as BasePasswordResetConfirmView,
+)
+from django.shortcuts import get_object_or_404, redirect
+from django.utils.crypto import get_random_string
+from django.utils.decorators import method_decorator
+from django.utils.http import is_safe_url
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.utils.translation import gettext_lazy as _
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.generic import View, FormView
+from django.conf import settings
+
+
+from .forms import (
+    SignInViaUsernameForm
+)
+# from .models import Activation
+
+
+class GuestOnlyView(View):
+    def dispatch(self, request, *args, **kwargs):
+        # Redirect to the index page if the user already authenticated
+        if request.user.is_authenticated:
+            return redirect(settings.LOGIN_REDIRECT_URL)
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class LogInView(GuestOnlyView, FormView):
+    template_name = 'login.html'
+
+    @staticmethod
+    def get_form_class(**kwargs):
+        # if settings.DISABLE_USERNAME or settings.LOGIN_VIA_EMAIL:
+        #     return SignInViaEmailForm
+
+        # if settings.LOGIN_VIA_EMAIL_OR_USERNAME:
+        #     return SignInViaEmailOrUsernameForm
+
+        return SignInViaUsernameForm
+
+    @method_decorator(sensitive_post_parameters('password'))
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        # Sets a test cookie to make sure the user has cookies enabled
+        request.session.set_test_cookie()
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        request = self.request
+
+        # If the test cookie worked, go ahead and delete it since its no longer needed
+        if request.session.test_cookie_worked():
+            request.session.delete_test_cookie()
+
+        # The default Django's "remember me" lifetime is 2 weeks and can be changed by modifying
+        # the SESSION_COOKIE_AGE settings' option.
+        if settings.USE_REMEMBER_ME:
+            if not form.cleaned_data['remember_me']:
+                request.session.set_expiry(0)
+
+        login(request, form.user_cache)
+
+        redirect_to = request.POST.get(REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME))
+        url_is_safe = is_safe_url(redirect_to, allowed_hosts=request.get_host(), require_https=request.is_secure())
+
+        if url_is_safe:
+            return redirect(redirect_to)
+
+        return redirect(settings.LOGIN_REDIRECT_URL)
+
+class LogOutView(LoginRequiredMixin, BaseLogoutView):
+    template_name = 'logout.html'    
+
+
+class DeniedView(TemplateView):
+    template_name = "denied.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         return context

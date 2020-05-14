@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
 
 # Create your models here.
 
@@ -71,3 +73,12 @@ class VisitingRecord(models.Model):
     
     def __str__(self):
         return self.case_no
+
+class StaffUser(AbstractUser):
+  USER_TYPE_CHOICES = (
+      (1, 'CHP'),
+      (2, 'Epidemiologists'),
+      
+  )
+
+  user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=1)
