@@ -176,15 +176,15 @@ class SearchPage(TemplateView):
         connec = {}
         if key_patient and window:
             vrecords = VisitingRecord.objects.filter(case_no = key_patient)
-            print(vrecords)
+           #print(vrecords)
             for v in vrecords:
                 all_visit = VisitingRecord.objects.filter(loc = v.loc)
                 s_date = v.start_date - timedelta(days = int(window))
-                print("s: ",s_date)
-                print("s: ",type(s_date))
+               #print("s: ",s_date)
+               #print("s: ",type(s_date))
                 e_date = v.start_date + timedelta(days = int(window))
-                print("e: ", e_date)
-                print("e: ", type(e_date))
+               #print("e: ", e_date)
+               #print("e: ", type(e_date))
                 for av in all_visit:
                     if (av.case_no == v.case_no):
                         continue
@@ -194,16 +194,17 @@ class SearchPage(TemplateView):
                         patients.add(Patient.objects.get(case_no = av.case_no))
                         if av.case_no not in  connec:
                             connec[av.case_no] = []
-                        print("av.case_no:",av.case_no)
-                        # print("tmp.case_no:",tmp.case_no==patients.Patient.None)
+                       #print("av.case_no:",av.case_no)
+                       #print("tmp.case_no:",tmp.case_no==patients.Patient.None)
                         connec[av.case_no].append([
                             av.case_no,
                             Patient.objects.get(case_no = av.case_no).name,
                             Patient.objects.get(case_no = av.case_no).date_of_confirmation,
                             Location.objects.get(name = av.loc).name,
-                            av.start_date,
-                            Location.objects.get(name = v.loc).name,
-                            v.start_date
+                            str(as_date) + '---' + str(ae_date),
+                           #Location.objects.get(name = v.loc).name,
+                            str(v.start_date) + '---' + str(v.end_date),
+                            ""
                             ])
         context = super().get_context_data(**kwargs)
         context["patients"] = patients
