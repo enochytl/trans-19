@@ -29,5 +29,8 @@ urlpatterns = [
     ),
     re_path(r'^patients/$', views.patients, name='patients'),
     re_path(r'^locations/$', views.locations, name='locations'),
+    path('log-in/', views.LogInView.as_view(), name='log_in'),
+    path('log-out/', views.LogOutView.as_view(), name='log_out'),
+    path("denied/", views.DeniedView.as_view(), name="denied")
     
 ]
