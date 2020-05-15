@@ -35,7 +35,8 @@ class PatientProfile(LoginRequiredMixin, TemplateView):
                     start_date = request.POST['start_date'],
                     end_date = request.POST['end_date'],
                     loc = Location.objects.get(name=request.POST['location']),
-                    case_no = page_case_no
+                    case_no = page_case_no,
+                    detail = request.POST['detail'],
                     )
             elif 'delete_submit' in request.POST:
                 delete_list = request.POST.getlist('check_box_list')
@@ -137,6 +138,7 @@ class recordModify(LoginRequiredMixin, TemplateView):
             record.start_date = request.POST['start_date']
             record.end_date = request.POST['end_date']
             record.loc = Location.objects.get(name=request.POST['location'])
+            record.detail = request.POST['detail']
             record.save()
 
         return redirect('/patients/'+case_no) 
@@ -205,21 +207,28 @@ class SearchPage(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
             vrecords = VisitingRecord.objects.filter(case_no = key_patient)
            #print(vrecords)
             for v in vrecords:
+                # Ignore visiting locations with category residence and work
+                if (v.loc.category == "Home" or v.loc.category == "Work"):
+                    continue
+
                 all_visit = VisitingRecord.objects.filter(loc = v.loc)
+
+                # Contruct search window
                 s_date = v.start_date - timedelta(days = int(window))
                #print("s: ",s_date)
                #print("s: ",type(s_date))
-                e_date = v.start_date + timedelta(days = int(window))
+                e_date = v.end_date + timedelta(days = int(window))
                #print("e: ", e_date)
                #print("e: ", type(e_date))
+
                 for av in all_visit:
                     if (av.case_no == v.case_no):
                         continue
                     as_date = av.start_date
                     ae_date = av.end_date
-                    if (not ((s_date < e_date < as_date < ae_date) or (as_date < ae_date < s_date < e_date))):
+                    if (not ((s_date <= e_date < as_date <= ae_date) or (as_date <= ae_date < s_date <= e_date))):
                         patients.add(Patient.objects.get(case_no = av.case_no))
-                        if av.case_no not in  connec:
+                        if av.case_no not in  connec.keys():
                             connec[av.case_no] = []
                        #print("av.case_no:",av.case_no)
                        #print("tmp.case_no:",tmp.case_no==patients.Patient.None)
@@ -229,16 +238,16 @@ class SearchPage(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
                             Patient.objects.get(case_no = av.case_no).date_of_confirmation,
                             Location.objects.get(name = av.loc).name,
                             str(as_date) + '---' + str(ae_date),
-                           #Location.objects.get(name = v.loc).name,
+                            v.detail,
                             str(v.start_date) + '---' + str(v.end_date),
-                            ""
+                            av.detail,
                             ])
         context = super().get_context_data(**kwargs)
         context["patients"] = patients
         context["allpatients"] = Patient.objects.all()
         if (key_patient):
             context["key_patient"] = Patient.objects.get(case_no = key_patient)
-        print("connec:",connec)
+       #print("connec:",connec)
         context["connec"] = connec
         context["window"] = window
         # context["locations_visited"] = Location.objects.filter(case_no=case_no)

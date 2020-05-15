@@ -112,19 +112,11 @@
             </tr>
             </thead>
             <tbody>
-                <!-- <tr>
-                    <th>ABC12345678</th>
-                    <th>Enoch</th>
-                    <th>April 6, 2020</th>
-                </tr> -->
                 
-                <tr class='clickable-row' >
+                <tr>
                     <th> {{ key_patient.case_no }}</th>
                     <th> {{ key_patient.name }}</th>
                     <th> {{ key_patient.date_of_confirmation }}</th>
-                    <!-- <th> {{ pa.id_document_no }}</th> -->
-                    <!-- <th> {{ pa.date_of_birth }}</th> -->
-                    
                 
                 </tr> 
                 
@@ -139,9 +131,9 @@
                 <th>Name</th>
                 <th>Date Case Confirmed</th>
                 <th>Common Location Visited</th>
-                <th>Dates Visited by this patient (that identifies a poosible connection) </th>
-            <!--<th>Detail (if any) </th>-->
-                <th>Dates Visited by the selected patient (that identifies a poosible connection) </th>
+                <th>Dates Visited by this patient (that identifies a possible connection) </th>
+                <th>Detail (if any) </th>
+                <th>Dates Visited by the selected patient (that identifies a possible connection) </th>
                 <th>Detail (if any) </th>
 
             </tr>
@@ -150,19 +142,23 @@
             <tbody>
             
             {% for con in connec|get_item:pa.case_no %}
-                <tr class='clickable-row' >
+                <tr>
                     {%  for v in con %}
                         <th> {{ v }}</th>
                     {%  endfor %}
                 </tr> 
-                {% empty %}
-                <tr>Empty Record</tr>
+            {% empty %}
+            <tr>Empty Record</tr>
             {% endfor %}
             
                 
             </tbody>
         </table>
     {% endfor %}
+<br>
+<a href='/patients/'>
+  Back to page of patients
+</a>
 </body>
 
 </html>

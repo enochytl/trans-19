@@ -12,6 +12,7 @@
 <h1>Trans 19</h1>
 <br>
 <a href="{% url 'log_out' %}">Log out</a>
+<br><br>
 <p>Add a patient:</p>
 <!-- Insert Starts-->
 <form action="/patients/" method="post">
@@ -44,12 +45,6 @@
 <!-- Inster Ends -->
 
 <br>
-<p>Search for connections among patients</p>
-<form action = "/search/" >
-<input type = "submit" name = "Search Connection" value="Search Connection">
-</form>
-<br>
-
 <p>Showing all patients:</p>
 <form action='/patients/' method='post'>
 <table class="table" border="1">
@@ -92,6 +87,13 @@
 </table>
 <input type='submit' name='delete_submit' value='Delete selected patients'>
 </form>
+
+<br>
+<p>Search for connections among patients</p>
+<form action = "/search/" >
+<input type = "submit" name = "Search Connection" value="Search Connection">
+</form>
+<br>
 
 <a href="{% url 'locations' %}">
   View page of locations

@@ -37,7 +37,12 @@
       <th><input type="date" name="end_date" class="form-control"
            value={{ record.end_date|date:"Y-m-d" }} required></th>
     </tr> 
-    
+    <tr>
+      <th>Detail(if any): </th>
+      <th><input name="detail" class="form-control"
+           value="{{ record.detail }}"></th>
+    </tr>
+ 
 </table>
 <p><input type="submit" name="add_submit" value="Save" /></p>
 </form>

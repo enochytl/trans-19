@@ -34,7 +34,7 @@
     </tr>
     
 </table>
-
+<br>
 <p>Add a visiting record:</p>
 <!-- Insert Starts-->
 <form action="{% url 'patients_profile' patient.case_no %}" method="post">
@@ -60,6 +60,11 @@
       <th><input type="date" name="end_date" class="form-control"
            placeholder="End Date" required></th>
     </tr>
+    <tr>
+      <th>Detail(if any): </th>
+      <th><input name="detail" class="form-control"
+           placeholder="Detail"></th>
+    </tr>
 
   </table>
   <p><input type="submit" name="add_submit" value="Add visiting record" /></p>
@@ -78,6 +83,7 @@
         <th>Name</th>
         <th>Date From</th>
         <th>Date To</th>
+        <th>Detail(if any)</th>
         <th>District</th>
         <th>Coordinates (x, y)</th>
         <th>Address</th>
@@ -93,6 +99,7 @@
         <th> {{ vr.loc.name }} </th>
         <th> {{ vr.start_date }} </th>
         <th> {{ vr.end_date }} </th>
+        <th> {{ vr.detail }} </th>
         <th> {{ vr.loc.district }} </th>
         <th> ({{ vr.loc.x }}, {{ vr.loc.y }}) </th>
         <th>
