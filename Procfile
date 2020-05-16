@@ -1,1 +1,1 @@
-web:gunicorn trans19.wsgi --log-file-
+web: gunicorn trans19.wsgi --log-file-
