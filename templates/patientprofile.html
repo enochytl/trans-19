@@ -44,7 +44,7 @@
       <th>Location: </th>
       <th><select name="location" class="form-control" required>
           {% for lo in locations %}
-            <option value={{ lo.name }}>{{ lo.name }}</option>
+            <option value="{{ lo.name }}">{{ lo.name }}</option>
           {% endfor %}
         </datalist>
           </select>
