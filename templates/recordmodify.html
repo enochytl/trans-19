@@ -19,9 +19,9 @@
       <th><select name="location" class="form-control" required>
           {% for lo in locations %}
             {% if lo.name == record.loc.name %}
-              <option value={{ lo.name }} selected='selected'>{{ lo.name }}</option>
+              <option value="{{ lo.name }}" selected='selected'>{{ lo.name }}</option>
             {% else %}
-              <option value={{ lo.name }}>{{ lo.name }}</option>
+              <option value="{{ lo.name }}">{{ lo.name }}</option>
             {% endif %}
           {% endfor %}
           </select>
@@ -30,12 +30,12 @@
     <tr>
       <th>Start Date: </th>
       <th><input type="date" name="start_date" class="form-control"
-           value={{ record.start_date|date:"Y-m-d" }} required></th>
+           value="{{ record.start_date|date:"Y-m-d" }}" required></th>
     </tr>
     <tr>
       <th>End Date: </th>
       <th><input type="date" name="end_date" class="form-control"
-           value={{ record.end_date|date:"Y-m-d" }} required></th>
+           value="{{ record.end_date|date:"Y-m-d" }}" required></th>
     </tr> 
     <tr>
       <th>Detail(if any): </th>
