@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECRET_KEY = os.environ.get('TRANS19_SECRET_KEY')
 SECRET_KEY = "TRANS19_salt"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['hidden-castle-90291.herokuapp.com']
 
