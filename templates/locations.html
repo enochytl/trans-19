@@ -70,21 +70,21 @@
       <tr>
         <th>Category: </th>
         <th><select name = "category" class="form-control" required>
-            <option value='Home'>Home</option>
-            <option value='Work'>Work</option>
-            <option value='Vacation'>Vacation</option>
-            </select>
-        </th>    
+          <option value='Home'>Home</option>
+          <option value='Work'>Work</option>
+          <option value='Vacation'>Vacation</option>
+          </select>
+        </th>
       </tr>
       <tr>
         <th>Description: </th>
         <th><input name = "description" class="form-control" placeholder="description" required></th>
       </tr>
-    
-    </table>         
+
+    </table>
   <input type = "submit" name = "add_submit" value = "submit">
   </form>
-  
+
   <!-- Inster Ends -->
 
 <br>
@@ -119,7 +119,7 @@
       <th>
         <input type='checkbox' value='{{ lo.name }}' name='check_box_list'>
       </th>
-    </tr> 
+    </tr>
     {% empty %}
     <tr>Empty Record</tr>
     {% endfor %}
