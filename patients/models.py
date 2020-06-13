@@ -16,8 +16,11 @@ class Patient(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length = 50)
-    x = models.DecimalField(max_digits=12, decimal_places=6)
-    y = models.DecimalField(max_digits=12, decimal_places=6)
+    # x = models.DecimalField(max_digits=12, decimal_places=6)
+    # y = models.DecimalField(max_digits=12, decimal_places=6)
+    x = models.IntegerField(default=0)
+    y = models.IntegerField(default=0)
+
 
     # Address
     address_line_1 = models.CharField(max_length = 100, null=True, blank=True)
